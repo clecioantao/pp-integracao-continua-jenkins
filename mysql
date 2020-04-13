@@ -1,0 +1,1 @@
+10.0.4.21 ansible_user=jenkins ansible_private_key_file=/var/lib/jenkins/.ssh/id_rsa

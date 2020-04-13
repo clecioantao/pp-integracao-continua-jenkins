@@ -1,0 +1,14 @@
+---
+# tasks file for mysql
+#
+- name: Instalando MySQL-Server
+  apt:
+    name: mysql-server
+    state: present
+
+- name: Criando database de desenvolvimento
+  mysql_db: name={{ mysql_db }} state=present
+
+- name: Criando usuario de desenvolvimento
+  mysql_user: name={{ mysql_user }} password={{ mysql_password }} priv='*.*:ALL' state=present  
+

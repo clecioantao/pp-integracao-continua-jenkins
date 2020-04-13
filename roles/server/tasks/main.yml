@@ -1,0 +1,12 @@
+---
+# tasks file for server
+#
+- name: Update apt cache
+  apt: update_cache=yes
+
+- name: Instalando pre-requisitos
+  apt: 
+    name: "{{ packages }}"
+  vars:
+    packages:
+    - python-mysqldb

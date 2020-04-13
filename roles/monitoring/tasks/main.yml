@@ -1,0 +1,8 @@
+---
+# tasks file for monitoring
+- name: Check that you can connect (GET) to a page and it returns a status 200
+  uri:
+    url: http://52.165.147.130/
+    return_content: yes
+  register: status
+  failed_when: "'Forum' not in status.content"

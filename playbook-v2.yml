@@ -1,0 +1,14 @@
+- hosts: all
+  become: true
+  tasks:
+    - name: Instalando pacotes
+      apt: name={{ packages }} state=present
+      vars:
+        packages:
+        - python-apt
+        - nginx     
+
+    - name: Atualizando repositorios
+      apt: update_cache=yes
+
+      

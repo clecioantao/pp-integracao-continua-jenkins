@@ -1,0 +1,6 @@
+---
+# defaults file for mysql
+#
+mysql_db: homestead
+mysql_user: laravel_user
+mysql_password: schoolofnet

@@ -1,0 +1,48 @@
+---
+# tasks file for laravel
+#
+
+- name: Ansible copy files remote to remote
+  copy:
+    src: /home/jenkins/workspace/pp-laravel-vm_develop
+    dest: /var/www/html
+    owner: www-data
+    group: www-data
+    remote_src: yes
+    force: yes
+  notify: restart nginx  
+
+- name: Instalando composer globalmente
+  shell: curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+  args:
+    creates: usr/local/bin/composer
+
+- name: Verificando .env.example
+  stat: path=/var/www/html/.env.example
+  register: env_stat
+
+- name: Renomear .env
+  command: mv /var/www/html/.env.example /var/www/html/.env
+  when: env_stat.stat.exists
+
+- name: set DB_DATABASE
+  lineinfile: dest=/var/www/html/.env regexp='^DB_DATABASE=' line=DB_DATABASE=homestead
+
+- name: set DB_USERNAME
+  lineinfile: dest=/var/www/html/.env regexp='^DB_USERNAME=' line=DB_USERNAME=laravel_user
+
+- name: set DB_PASSWORD
+  lineinfile: dest=/var/www/html/.env regexp='^DB_PASSWORD=' line=DB_PASSWORD={{ db_password }} 
+
+- name: Verificando .env
+  stat: path=/var/www/html/.env
+  register: env_dev_stat
+
+- name: Run artisan key generate
+  shell: php /var/www/html/artisan key:generate
+  when: env_dev_stat.stat.exists
+
+- name: Run artisan migrate
+  shell: php /var/www/html/artisan migrate --force
+  when: env_dev_stat.stat.exists
+ 

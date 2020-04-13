@@ -1,0 +1,40 @@
+/bin/dd if=/dev/zero of=/var/swap.1 bs=1M count=1024
+/sbin/mkswap /var/swap.1
+/sbin/swapon /var/swap.1
+
+bin/magento setup:install \
+--base-url=http://magento2.hackathonshift.com.br/ \
+--db-host=localhost \
+--db-name=magento \
+--db-user=magento \
+--db-password=Acesso#2#visibilia \
+--backend-frontname=admin \
+--admin-firstname=admin-magento \
+--admin-lastname=admin-magento \
+--admin-email=jackson2@easyitcloud.com.br \
+--admin-user=admin-magento \
+--admin-password=admin123 \
+--language=en_US \
+--currency=USD \
+--timezone=America/Sao_Paulo \
+--use-rewrites=1
+
+sudo chown -R nginx: /var/www/magento
+
+find var vendor pub/static pub/media app/etc -type f -exec chmod u+w {} \;
+find var vendor pub/static pub/media app/etc -type d -exec chmod u+w {} \;
+chmod u+x bin/magento
+
+
+
+find . -type f -exec chmod 664 {} \;
+
+find . -type d -exec chmod 775 {} \;
+
+find var generated vendor pub/static pub/media app/etc -type f -exec chmod g+w {} +
+
+find var generated vendor pub/static pub/media app/etc -type d -exec chmod g+ws {} +
+
+sudo chown -R nginx: /var/www/magento
+
+systemctl restart nginx
